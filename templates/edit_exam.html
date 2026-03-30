@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <div class="card shadow border-0 rounded-4 p-4">
+        <h3>Edit Exam: {{ exam.title }}</h3>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">Update Exam</button>
+                <a href="{% url 'exam_list' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

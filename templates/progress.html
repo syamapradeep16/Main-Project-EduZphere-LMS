@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>Course Progress</h3>
+
+{% for p in progresses %}
+
+<div class="course-progress">
+
+    <h6>{{ p.course.title }}</h6>
+
+    <div class="progress">
+
+        <div class="progress-bar bg-info">
+    
+             {{ p.progress }}%
+
+        </div>
+
+    </div>
+
+</div>
+
+<br>
+
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="guest-container">
+    <div class="welcome-section text-center">
+        <div class="guest-icon-circle mb-3 mx-auto">
+             <i class="fa-solid fa-graduation-cap text-white fa-3x"></i>
+        </div>
+        <h1 class="display-3 fw-bold text-white mb-3">Welcome to EduZphere</h1>
+        <span class="badge text-white">Empowering Futures</span>
+        <p class="fs-4 text-white">Your professional gateway to structured learning.</p>
+        <p class="fs-5 text-white opacity-80">Explore courses, join workshops, and build your future.</p>
+        <a href="{% url 'login' %}" class="btn-primary text-white">Explore Courses</a>
+        <a href="{% url 'about' %}" class="btn-primary text-white">Learn More</a>
+        </div>
+</div>
+{% endblock %}

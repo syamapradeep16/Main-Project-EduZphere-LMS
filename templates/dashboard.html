@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="profile-sidebar-card shadow-sm text-center p-4 bg-white rounded-4 border-0 h-100">
+                <div class="position-relative d-inline-block">
+                    <img src="{% if profile.role == 'instructor' %}{% static '/images/instructor.png' %}{% else %}{% static '/images/student.jpg' %}{% endif %}" 
+                         class="profile-pic" style="width:120px; height:120px; border-radius:50%; object-fit:cover;">
+                </div>
+                
+                <h3 class="fw-bold mt-3 mb-1">{{ user.username|upper }}</h3>
+                <span class="badge bg-soft-blue text-primary px-4 py-2 mb-3 fs-6">{{ profile.get_role_display }}</span>
+                
+                <p class="text-muted px-3 small">
+                    {{ profile.bio|default:"No bio added yet. Update your profile to share your professional journey." }}
+                </p>
+
+                {% if profile.role == 'student' %}
+                <div class="stats-sidebar-box mt-4 text-start p-3 rounded-3 bg-light">
+                    <h6 class="fw-bold small text-uppercase text-muted border-bottom pb-2 mb-3">Learning Stats</h6>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Attendance</span>
+                        <span class="fw-bold text-primary">{{ attendance_count }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Exams Passed</span>
+                        <span class="fw-bold text-success">{{ exams_passed }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>Certificates</span>
+                        <span class="fw-bold text-warning">{{ my_certificates }}</span>
+                    </div>
+                </div>
+                {% elif profile.role == 'instructor' %}
+                <div class="stats-sidebar-box mt-4 text-start p-3 rounded-3 bg-primary text-dark shadow-sm">
+                    <h6 class="fw-bold small text-uppercase opacity-75 border-bottom border-white pb-2 mb-3">Tutor Overview</h6>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Managed Courses</span>
+                        <span class="fw-bold">{{ my_managed_courses.count }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span>Active Students</span>
+                        <span class="fw-bold">{{ total_student_count }}</span>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            {% if profile.role == 'student' %}
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-primary text-white rounded-circle p-2 me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-book-reader"></i>
+                    </div>
+                    <h3 class="fw-bold mb-0">Active Enrollments</h3>
+                </div>
+
+                <div class="row g-4">
+                    {% for item in enrolled_courses %}
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 p-4">
+                            <h5 class="fw-bold text-dark">{{ item.course.title }}</h5>
+                            <div class="progress mt-3 mb-2" style="height: 8px;">
+                                <div class="progress-bar bg-primary" style="width: {{ learning_progress }}%;"></div>
+                            </div>
+                            <div class="d-flex justify-content-between small text-muted">
+                                <span>Course Progress</span>
+                                <span>{{ learning_progress }}%</span>
+                            </div>
+                            <a href="{% url 'course_detail' id=item.course.id %}" class="btn btn-primary mt-3 rounded-pill">Continue Learning</a>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center py-5 bg-light rounded-4 border border-dashed">
+                        <p class="text-muted mb-0">No courses in your learning path yet.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="mt-5">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="bg-success text-white rounded-circle p-2 me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-receipt"></i>
+                        </div>
+                        <h3 class="fw-bold mb-0">Purchase History</h3>
+                    </div>
+
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0 align-middle">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="ps-4">Course</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th class="pe-4 text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for payment in payments %}
+                                    <tr>
+                                        <td class="ps-4"><strong>{{ payment.course.title }}</strong></td>
+                                        <td>{{ payment.date|date:"d M, Y" }}</td>
+                                        <td class="text-success fw-bold">₹{{ payment.amount }}</td>
+                                        <td class="pe-4 text-end">
+                                            {% if payment.payment_id %}
+                                                <a href="{% url 'payment_receipt' payment.payment_id %}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">
+                                                    <i class="fas fa-file-invoice me-1"></i> Receipt
+                                                </a>
+                                            {% else %}
+                                                <span class="text-muted">No ID available</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="4" class="text-center py-4 text-muted small">No payment records found.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            {% elif profile.role == 'instructor' %}
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-success text-white rounded-circle p-2 me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h3 class="fw-bold mb-0">My Published Courses</h3>
+                    </div>
+                    <a href="{% url 'create_course' %}" class="btn btn-success rounded-pill px-4 shadow-sm">
+                        <i class="fas fa-plus me-2"></i>New Course
+                    </a>
+                </div>
+
+                <div class="row g-4">
+                    {% for course in my_managed_courses %}
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm rounded-4 p-4 border-top border-4 border-success">
+                            <h5 class="fw-bold text-dark">{{ course.title }}</h5>
+                            <p class="text-muted small mb-4">{{ course.description|truncatewords:15 }}</p>
+                            
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <div class="text-muted small">
+                                    <i class="fas fa-users me-1 text-success"></i> {{ course.enrollment_set.count }} Students
+                                </div>
+                                <a href="{% url 'course_detail' id=course.id %}" class="btn btn-sm btn-light border rounded-pill px-3">
+                                    Manage Content
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12 text-center py-5 bg-light rounded-4 border border-dashed">
+                        <i class="fas fa-folder-open fa-3x text-muted mb-3 opacity-25"></i>
+                        <h5 class="text-muted">You haven't created any courses yet.</h5>
+                        <p class="small text-muted">Start sharing your knowledge with the world!</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

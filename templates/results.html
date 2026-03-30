@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>Exam Results</h3>
+
+<table class="table">
+
+<tr>
+
+<th>Exam</th>
+<th>Marks</th>
+<th>Status</th>
+
+</tr>
+
+{% for r in results %}
+
+<tr>
+
+<td>{{r.exam}}</td>
+<td>{{r.marks}}</td>
+
+<td>
+
+{% if r.passed %}
+Pass
+{% else %}
+Fail
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>{{lesson.title}}</h3>
+
+<video width="100%" controls>
+
+<source src="{{lesson.video.url}}" type="video/mp4">
+
+</video>
+
+<p>{{lesson.content}}</p>
+
+{% endblock %}

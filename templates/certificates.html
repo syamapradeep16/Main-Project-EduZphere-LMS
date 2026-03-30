@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold mb-4">My Certificates</h2>
+    <div class="row">
+        {% for cert in certificates %}
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm rounded-4 text-center p-4">
+                <div class="mb-3">
+                    <i class="fa-solid fa-medal fa-4x text-warning"></i>
+                </div>
+                <h5>{{ cert.course.title }}</h5>
+                <p class="text-muted small">Issued on: {{ cert.issued_date }}</p>
+                <a href="{% url 'generate_pdf' cert.id %}" target="_blank" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                    <i class="fa-solid fa-certificate me-2"></i> View Certificate
+                </a>
+                <br>
+                {% comment %} <a href="{% url 'generate_pdf' cert.id %}" class="btn btn-dark btn-sm rounded-pill px-4">
+                    <i class="fas fa-download me-2"></i> Download PDF
+                </a> {% endcomment %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted">Complete all exams in a course to earn your first certificate!</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

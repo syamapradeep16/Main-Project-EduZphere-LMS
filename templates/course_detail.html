@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none">Courses</a></li>
+                    <li class="breadcrumb-item active">{{ course.title }}</li>
+                </ol>
+            </nav>
+            <h1 class="display-5 fw-bold text-dark mb-3">{{ course.title }}</h1>
+            <p class="lead text-muted">{{ course.description }}</p>
+            <div class="d-flex align-items-center gap-4">
+                <span class="text-muted"><i class="fas fa-user-tie me-2"></i>{{ course.instructor.username }}</span>
+                <span class="text-muted"><i class="fas fa-clock me-2"></i>Updated {{ course.created_at|date:"M Y" }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <h3 class="fw-bold text-dark mb-4">Course Content</h3>
+            <div class="row g-3">
+                {% for lesson in course.lessons.all %}
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm rounded-4 lesson-card">
+                        <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="lesson-number me-3">{{ forloop.counter }}</div>
+                                <div>
+                                    <h5 class="fw-bold mb-1">{{ lesson.title }}</h5>
+                                    <p class="text-muted small mb-0">{{ lesson.content|truncatewords:10 }}</p>
+                                </div>
+                            </div>
+                            <div>
+                                {% if is_enrolled or is_instructor %}
+                                    <a href="{% url 'lesson_detail' course.id lesson.id %}" class="btn btn-primary rounded-pill px-4">
+                                        <i class="fas fa-play me-2"></i>Start
+                                    </a>
+                                {% else %}
+                                    <i class="fas fa-lock text-muted"></i>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted ps-3">No lessons added to this course yet.</p>
+                {% endfor %}
+
+                {% if is_instructor %}
+                <div class="col-12 mt-3">
+                    <a href="{% url 'add_lesson' course.id %}" class="btn btn-outline-primary w-100 py-3 rounded-4 border-dashed">
+                        <i class="fas fa-plus-circle me-2"></i>Add New Lesson
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="sticky-top" style="top: 20px; z-index: 10;">
+                
+                <div class="card border-0 shadow-lg rounded-4 mb-4">
+                    <div class="card-body p-4">
+                        {% if is_instructor %}
+                            <div class="alert alert-info border-0 rounded-pill text-center py-2 mb-3">
+                                <small class="fw-bold"><i class="fas fa-user-shield me-2"></i>Instructor Mode</small>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'edit_course' course.id %}" class="btn btn-dark rounded-pill">Edit Course</a>
+                                <a href="{% url 'mark_attendance' course.id %}" class="btn btn-outline-dark rounded-pill">Attendance</a>
+                            </div>
+                        {% elif is_enrolled %}
+                            <div class="alert alert-success border-0 rounded-pill text-center py-2 mb-3">
+                                <small class="fw-bold"><i class="fas fa-check-circle me-2"></i>Enrolled</small>
+                            </div>
+                            <div class="progress mb-3" style="height: 8px;">
+                                <div class="progress-bar bg-success" style="width: 45%"></div>
+                            </div>
+                        {% else %}
+                            <h3 class="fw-bold mb-3">${{ course.price }}</h3>
+                            <a href="{% url 'checkout' course.id %}" class="btn btn-primary w-100 rounded-pill py-3 fw-bold shadow">Enroll Now</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                    <div class="card-header bg-dark text-white py-3 px-4 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold small text-uppercase">Course Assessments</h5>
+                        {% if is_instructor %}
+                        <a href="{% url 'add_exam' course.id %}" class="btn btn-sm btn-light rounded-circle">
+                            <i class="fas fa-plus"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                    <div class="card-body p-4">
+                        {% for exam_item in exams %}
+                        <div class="exam-item p-3 rounded-4 bg-light mb-3 border-start border-primary border-4">
+                            <h6 class="fw-bold mb-1">{{ exam_item.title }}</h6>
+                            <p class="text-muted x-small mb-3">
+                                <i class="fas fa-award text-warning me-1"></i>{{ exam_item.total_marks }} Marks | 
+                                <i class="fas fa-calendar me-1"></i>{{ exam_item.exam_date|date:"d M" }}
+                            </p>
+
+                            {% if is_instructor %}
+                                <div class="d-flex flex-column gap-2">
+                                    <a href="{% url 'view_exam_details' exam_item.id %}" class="btn btn-sm btn-dark rounded-pill">
+                                        <i class="fas fa-poll me-2"></i>Results & View
+                                    </a>
+                                    <div class="d-flex gap-2">
+                                        <a href="{% url 'edit_exam' exam_item.id %}" class="btn btn-sm btn-outline-secondary w-50 rounded-pill">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <a href="{% url 'delete_exam' exam_item.id %}" class="btn btn-sm btn-outline-danger w-50 rounded-pill">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% elif is_enrolled %}
+                                <a href="{% url 'take_exam' exam_item.id %}" class="btn btn-sm btn-primary w-100 rounded-pill">Take Exam</a>
+                            {% else %}
+                                <button class="btn btn-sm btn-light w-100 rounded-pill disabled"><i class="fas fa-lock me-2"></i>Locked</button>
+                            {% endif %}
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-clipboard-list fa-2x text-muted opacity-25 mb-2"></i>
+                            <p class="small text-muted mb-0">No assessments scheduled.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .lesson-card { transition: all 0.3s ease; border: 1px solid transparent !important; }
+    .lesson-card:hover { transform: translateX(8px); border-color: #0d6efd !important; }
+    .lesson-number {
+        width: 35px; height: 35px; background: #f8f9fa; border: 1px solid #dee2e6;
+        border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        font-weight: bold; color: #0d6efd;
+    }
+    .border-dashed { border: 2px dashed #dee2e6 !important; }
+    .x-small { font-size: 0.75rem; }
+    .exam-item { transition: background 0.2s; }
+    .exam-item:hover { background: #e9ecef !important; }
+</style>
+{% endblock %}

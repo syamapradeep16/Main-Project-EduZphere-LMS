@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <div class="card shadow border-0 rounded-4 p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold mb-0">Mark Attendance: {{ course.title }}</h3>
+            <span class="badge bg-dark px-3 py-2">{{ today }}</span>
+        </div>
+        
+        <form method="POST">
+            {% csrf_token %}
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Student Name</th>
+                            <th class="text-center">Attendance Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for enrollment in enrollments %}
+                        <tr>
+                            <td class="fw-semibold">
+                                {{ enrollment.student.user.get_full_name|default:enrollment.student.user.username }}
+                            </td>
+                            <td class="text-center">
+                                <div class="btn-group" role="group">
+                                    <input type="radio" class="btn-check" name="status_{{ enrollment.student.id }}" 
+                                           value="present" id="p_{{ enrollment.student.id }}" checked>
+                                    <label class="btn btn-outline-success btn-sm px-4" for="p_{{ enrollment.student.id }}">
+                                        <i class="fa-solid fa-check me-1"></i> Present
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="status_{{ enrollment.student.id }}" 
+                                           value="absent" id="a_{{ enrollment.student.id }}">
+                                    <label class="btn btn-outline-danger btn-sm px-4" for="a_{{ enrollment.student.id }}">
+                                        <i class="fa-solid fa-xmark me-1"></i> Absent
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary px-5 rounded-pill">Submit Attendance</button>
+                <a href="{% url 'attendance' %}" class="btn btn-link text-muted">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

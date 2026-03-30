@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0 p-4 rounded-4">
+            <h3 class="fw-bold text-center">Order Summary</h3>
+            <hr>
+            <div class="d-flex justify-content-between mb-3">
+                <span>Course:</span>
+                <span class="fw-bold">{{ course.title }}</span>
+            </div>
+            <div class="d-flex justify-content-between mb-4">
+                <span>Total Amount:</span>
+                <span class="text-primary fw-bold">${{ course.price }}</span>
+            </div>
+            
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-lg w-100">Complete Purchase</button>
+            </form>
+            <a href="{% url 'course_detail' course.id %}" class="btn btn-link w-100 mt-2 text-muted">Cancel</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

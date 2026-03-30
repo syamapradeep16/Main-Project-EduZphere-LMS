@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="text-dark rounded-4 p-4 mb-5 shadow-sm">
+    <div class="row align-items-center">
+        <div class="col-md-7">
+            <h1 class="display-6 fw-bold mb-0">Student Directory</h1>
+            <p class="opacity-75 mb-0">Manage enrollments and track student participation across your courses.</p>
+        </div>
+        <div class="col-md-5 text-md-end mt-3 mt-md-0">
+            <div class="d-inline-block bg-white bg-opacity-10 p-3 rounded-4 border border-white border-opacity-25">
+                <div class="text-center">
+                    <h3 class="fw-bold mb-0">{{ enrollments.count }}</h3>
+                    <small class="text-uppercase opacity-75 fw-bold" style="font-size: 0.7rem;">Total Students</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm rounded-pill p-2">
+            <form method="GET" class="row g-2 align-items-center px-3">
+                <div class="col-md-auto">
+                    <span class="text-muted fw-bold small ps-2"><i class="fas fa-filter me-2"></i>FILTER BY:</span>
+                </div>
+                <div class="col-md-4">
+                    <select name="course" class="form-select border-0 bg-light rounded-pill" onchange="this.form.submit()">
+                        <option value="">All Active Courses</option>
+                        {% for course in instructor_courses %}
+                            <option value="{{ course.id }}" {% if selected_course == course.id|stringformat:"i" %}selected{% endif %}>
+                                {{ course.title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-5 ms-auto">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-0"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" name="search" class="form-control border-0 bg-light rounded-pill" placeholder="Search student name..." value="{{ request.GET.search }}">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <table class="table align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th class="ps-4">Student Name</th>
+                    <th>Course</th>
+                    <th>Enrollment Date</th>
+                    <th class="text-end pe-4">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for enr in enrollments %}
+                <tr>
+                    <td class="ps-4">
+                        <span class="fw-bold">{{ enr.student.user.get_full_name|default:enr.student.user.username }}</span>
+                        <br><small class="text-muted">{{ enr.student.user.email }}</small>
+                    </td>
+                    <td>
+                        <span class="badge bg-primary-subtle text-primary rounded-pill">{{ enr.course.title }}</span>
+                    </td>
+                    <td>{{ enr.enrolled_date|date:"d M Y" }}</td>
+                    <td class="text-end pe-4">
+                        <a href="mailto:{{ enr.student.user.email }}" class="btn btn-sm btn-outline-dark rounded-pill">
+                            <i class="fas fa-envelope me-1"></i> Contact
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center py-5 text-muted">No students found for this filter.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+{% endblock %}

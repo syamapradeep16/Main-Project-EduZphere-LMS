@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <div class="card shadow border-0 rounded-4 p-4 max-width-600 mx-auto">
+        <h3 class="fw-bold mb-4 text-primary">Edit Lesson: {{ lesson.title }}</h3>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary px-5 rounded-pill">Update Lesson</button>
+                <a href="{% url 'course_detail' course.id %}" class="btn btn-link text-muted">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

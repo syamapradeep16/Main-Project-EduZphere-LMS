@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="workshop-content-wrapper p-5">
+    <div class="container-fluid">
+        <div class="row mb-5">
+            <div class="col-12">
+                <h1 class="display-5 fw-bold text-dark">Free Workshops</h1>
+                <p class="text-muted fs-5">Enhance your skills with our live, expert-led community sessions.</p>
+                <hr class="w-25 border-primary border-2 opacity-50">
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-xl-4 col-md-6">
+                <div class="workshop-card shadow-sm h-100">
+                    <div class="status-badge">Upcoming</div>
+                    <div class="p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fa-brands fa-python text-primary fa-2x me-3"></i>
+                            <h4 class="mb-0 text-dark">Python for Beginners</h4>
+                        </div>
+                        <p class="text-muted small">Learn the basics of Python syntax and build your first automation script in 90 minutes.</p>
+                        <ul class="list-unstyled mb-4">
+                            <li class="small mb-2"><i class="fa-solid fa-calendar text-primary me-2"></i> March 25, 2026</li>
+                            <li class="small"><i class="fa-solid fa-clock text-primary me-2"></i> 6:00 PM - 7:30 PM</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-primary w-100 rounded-pill">Reserve My Spot</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6">
+                <div class="workshop-card shadow-sm h-100">
+                    <div class="status-badge">New</div>
+                    <div class="p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fa-solid fa-microchip text-primary fa-2x me-3"></i>
+                            <h4 class="mb-0 text-dark">Embedded Systems 101</h4>
+                        </div>
+                        <p class="text-muted small">An introduction to microcontroller programming and hardware interfacing for engineers.</p>
+                        <ul class="list-unstyled mb-4">
+                            <li class="small mb-2"><i class="fa-solid fa-calendar text-primary me-2"></i> April 02, 2026</li>
+                            <li class="small"><i class="fa-solid fa-clock text-primary me-2"></i> 5:00 PM - 6:30 PM</li>
+                        </ul>
+                        <a href="#" class="btn btn-outline-primary w-100 rounded-pill">Reserve My Spot</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6">
+                <div class="workshop-card shadow-sm h-100">
+                    <div class="status-badge bg-secondary">On-Demand</div>
+                    <div class="p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fa-solid fa-brain text-primary fa-2x me-3"></i>
+                            <h4 class="mb-0 text-dark">Intro to AI Modeling</h4>
+                        </div>
+                        <p class="text-muted small">Explore real-world data science modeling. Perfect for beginners entering the AI sphere.</p>
+                        <ul class="list-unstyled mb-4">
+                            <li class="small mb-2"><i class="fa-solid fa-video text-primary me-2"></i> Recorded Session</li>
+                            <li class="small"><i class="fa-solid fa-tags text-primary me-2"></i> Free Access</li>
+                        </ul>
+                        <a href="#" class="btn btn-primary w-100 rounded-pill">Watch Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

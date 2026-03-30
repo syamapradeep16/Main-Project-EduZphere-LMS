@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="profile-container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="profile-sidebar-card shadow-sm text-center p-4 bg-white rounded-4">
+            {% if profile.role == 'admin' %}
+                <img src="{% static 'images/admin.jpg' %}" alt="Admin" class="profile-pic">
+            {% elif profile.role == 'instructor' %}
+                <img src="{% static 'images/instructor.png' %}" alt="Instructor" class="profile-pic">
+            {% else %}
+                <img src="{% static 'images/student.jpg' %}" alt="Student" class="profile-pic">
+            {% endif %}
+
+            <h3 class="fw-bold mt-4">{{ user.username|upper }}</h3>
+            <span class="badge bg-soft-blue text-primary px-3">{{ profile.get_role_display }}</span>
+            <p class="text-muted">{{ profile.bio }}</p>
+            <a href="#" class="btn btn-outline-primary btn-sm">Edit Profile</a>
+            </div>    
+        </div>
+
+        <div class="col-md-8">
+            <div class="card p-4 shadow-sm">
+                
+                {% if profile.role == 'instructor' %}
+                    <h4 class="fw-bold">Management Dashboard</h4>
+                    <p>Courses you are currently teaching:</p>
+                    <ul class="list-group">
+                        {% for course in my_courses %}
+                            <li class="list-group-item d-flex justify-content-between">
+                                {{ course.title }}
+                                <a href="{% url 'course_detail' course.id %}" class="btn btn-sm btn-link">View</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                {% elif profile.role == 'student' %}
+                    <h4 class="fw-bold">My Learning Stats</h4>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <div class="p-3 border rounded text-center">
+                                <h6>Attendance</h6>
+                                <h2 class="text-primary">{{ attendance_count }}</h2>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-3 border rounded text-center">
+                                <h6>Exams Passed</h6>
+                                <h2 class="text-success">{{ results.count }}</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                {% elif profile.role == 'admin' %}
+                    <h4 class="fw-bold">Platform Overview</h4>
+                    <div class="list-group mt-3">
+                        <div class="list-group-item">Total Registered Users: <strong>{{ total_users }}</strong></div>
+                        <div class="list-group-item">Active Courses: <strong>{{ total_courses }}</strong></div>
+                    </div>
+                    <a href="/admin/" class="btn btn-dark mt-3 w-100">Access Full Admin Panel</a>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

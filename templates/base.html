@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduZphere Learning Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="dashboard-wrapper">
+        
+        <header class="main-header">
+            <div class="logo-container">
+                <img src="{% static 'images/logo.png' %}" alt="EduZphere Logo" class="logo-image">
+                <span class="logo-text">EduZphere</span>
+            </div>
+            <div class="header-auth-bar">
+            {% if user.is_authenticated %}
+                <span class="text-light fs-4">Welcome, {{ user.username }}</span>
+                <a href="{% url 'logout' %}" class="btn btn-outline-light btn-md">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="text-white me-3 text-decoration-none">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-light btn-sm">Join Now</a>
+            {% endif %}
+            </div>
+        </header>
+
+        <div class="main-body-container">
+            <nav class="sidebar">
+           <ul>
+            {% if not user.is_authenticated %}
+            <li class="sidebar-divider">Discovery</li>
+            <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="{% url 'about' %}" class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}"><i class="fa-solid fa-circle-info"></i> About EduZphere</a></li>
+            <li><a href="{% url 'workshops' %}" class="{% if request.resolver_match.url_name == 'workshops' %}active{% endif %}"><i class="fa-solid fa-bolt"></i> Free Workshops</a></li>
+            <li><a href="{% url 'contact' %}" class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}"><i class="fa-solid fa-envelope"></i> Contact Support</a></li>
+    
+            <li class="sidebar-divider">Getting Started</li>
+            {% if user.is_authenticated and user.is_staff or user.profile.role == 'admin' %}
+                <li class="sidebar-divider">Administration</li>
+                <li>
+                    <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                        <i class="fa-solid fa-gauge-high"></i> Admin Dashboard
+                    </a>
+                </li>
+                <li><a href="/admin/"><i class="fa-solid fa-database"></i>Administration</a></li>
+            {% endif %}
+            <li><a href="{% url 'register' %}"><i class="fa-solid fa-user-plus"></i> Become a Member</a></li>
+
+            {% elif user.profile.role == 'instructor' %}
+            <li class="sidebar-divider">Instructor Tools</li>
+            <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+            <li><a href="{% url 'course_list' %}" class="{% if request.resolver_match.url_name == 'course_list' %}active{% endif %}"><i class="fa-solid fa-chalkboard-user"></i> My Courses</a></li>
+            <li><a href="{% url 'student_list' %}" class="{% if request.resolver_match.url_name == 'student_list' %}active{% endif %}""><i class="fa-solid fa-users"></i> My Students</a></li>
+            <li><a href="{% url 'attendance' %}" class="{% if request.resolver_match.url_name == 'attendance' %}active{% endif %}"><i class="fa-solid fa-user-check"></i> Attendance Logs</a></li>
+            <li><a href="{% url 'exam_list' %}" class="{% if request.resolver_match.url_name == 'exam_list' %}active{% endif %}"><i class="fa-solid fa-square-poll-vertical"></i> Grading & Exams</a></li>
+            
+            {% elif user.profile.role == 'student' %}
+            <li class="sidebar-divider">Learning Zone</li>
+            <li><a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                <i class="fa-solid fa-gauge-high me-3"></i> Dashboard</a></li>
+            <li><a href="{% url 'student_courses' %}" class="{% if request.resolver_match.url_name == 'student_courses' %}active{% endif %}"><i class="fa-solid fa-chalkboard-user"></i> My Courses</a></li>
+            <li><a href="{% url 'course_list' %}" class="{% if request.resolver_match.url_name == 'course_list' %}active{% endif %}"><i class="fa-solid fa-book-open"></i> Browse Courses</a></li>
+            <li><a href="{% url 'attendance' %}" class="{% if request.resolver_match.url_name == 'attendance' %}active{% endif %}"><i class="fa-solid fa-calendar-check"></i> Attendance</a></li>
+            <li><a href="{% url 'exam_list' %}" class="{% if request.resolver_match.url_name == 'exam_list' %}active{% endif %}"><i class="fa-solid fa-file-signature"></i> My Exams</a></li>
+            <li><a href="{% url 'certificates' %}" class="{% if request.resolver_match.url_name == 'certificates' %}active{% endif %}"><i class="fa-solid fa-certificate"></i> Certificates</a></li>
+
+            {% elif user.is_staff or user.profile.role == 'admin' %}
+                <li class="sidebar-divider">Admin Controls</li>
+                <li><a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <i class="fa-solid fa-gauge-high"></i> Admin Dashboard</a>
+                </li>
+                <li><a href="{% url 'student_list' %}" class="{% if request.resolver_match.url_name == 'student_list' %}active{% endif %}">
+                    <i class="fa-solid fa-user-graduate"></i> Student Directory</a>
+                </li>
+                <li><a href="/admin/auth/user/"><i class="fa-solid fa-chalkboard-user"></i> Manage Users</a></li>
+                <li><a href="{% url 'system_backup' %}"><i class="fa-solid fa-database"></i> System Backups</a></li>
+            {% endif %}
+            </ul>
+            </nav>
+
+            <div class="main-content">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm mb-4" role="alert" style="border-radius: 12px;">
+                <i class="fa-solid fa-check-circle me-2"></i> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+                {% endif %}
+
+            {% block content %}
+    
+            {% endblock %}
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+           
