@@ -206,3 +206,13 @@ def lesson_detail(request, course_id, lesson_id):
     
     messages.warning(request, "You must be enrolled to watch this lesson.")
     return redirect('course_detail', id=course.id)
+
+def workshops(request):
+    return render(request, 'workshops.html')
+
+def workshop_action(request, action_type, title):
+    context = {
+        'action_type': action_type,
+        'title': title.replace('-', ' '),
+    }
+    return render(request, 'workshop_action.html', context)

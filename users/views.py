@@ -187,9 +187,6 @@ def instructor_list(request):
         'all_courses': all_courses
     })
 
-def workshops(request):
-    return render(request, 'workshops.html')
-
 @staff_member_required
 def assign_course(request, user_id):
     if request.method == "POST":

@@ -2,12 +2,61 @@
 {% load static %}
 
 {% block content %}
+<style>
+    .workshop-content-wrapper {
+        background: rgba(240, 242, 245, 0.4);
+        min-height: 100vh;
+    }
+
+    .workshop-card {
+        background: #ffffff;
+        border-radius: 20px;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .workshop-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .status-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 5px 15px;
+        border-radius: 50px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: white;
+        z-index: 2;
+        background: #0066ff; /* Default Blue */
+    }
+
+    .badge-upcoming { background: #0066ff; }
+    .badge-recorded { background: #6c757d; }
+
+    .workshop-icon-circle {
+        width: 60px;
+        height: 60px;
+        background: rgba(0, 102, 255, 0.1);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+</style>
+
 <div class="workshop-content-wrapper p-5">
     <div class="container-fluid">
         <div class="row mb-5">
             <div class="col-12">
-                <h1 class="display-5 fw-bold text-dark">Free Workshops</h1>
-                <p class="text-muted fs-5">Enhance your skills with our live, expert-led community sessions.</p>
+                <h1 class="display-5 fw-bold text-dark">E-Learning Workshops</h1>
+                <p class="text-muted fs-5">Interactive sessions and masterclasses to boost your career.</p>
                 <hr class="w-25 border-primary border-2 opacity-50">
             </div>
         </div>
@@ -15,54 +64,46 @@
         <div class="row g-4">
             <div class="col-xl-4 col-md-6">
                 <div class="workshop-card shadow-sm h-100">
-                    <div class="status-badge">Upcoming</div>
+                    <div class="status-badge badge-upcoming">Upcoming</div>
                     <div class="p-4">
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="fa-brands fa-python text-primary fa-2x me-3"></i>
-                            <h4 class="mb-0 text-dark">Python for Beginners</h4>
+                        <div class="workshop-icon-circle">
+                            <i class="fa-brands fa-python text-primary fa-2x"></i>
                         </div>
-                        <p class="text-muted small">Learn the basics of Python syntax and build your first automation script in 90 minutes.</p>
-                        <ul class="list-unstyled mb-4">
-                            <li class="small mb-2"><i class="fa-solid fa-calendar text-primary me-2"></i> March 25, 2026</li>
-                            <li class="small"><i class="fa-solid fa-clock text-primary me-2"></i> 6:00 PM - 7:30 PM</li>
+                        <h4 class="fw-bold text-dark mb-3">Python for Beginners</h4>
+                        <p class="text-muted small mb-4">Master the core fundamentals of Python in this 90-minute live interactive session.</p>
+                        
+                        <ul class="list-unstyled mb-4 small">
+                            <li class="mb-2"><i class="fa-solid fa-calendar text-primary me-2"></i> March 25, 2026</li>
+                            <li><i class="fa-solid fa-clock text-primary me-2"></i> 5:00 PM - 6:30 PM</li>
                         </ul>
-                        <a href="#" class="btn btn-outline-primary w-100 rounded-pill">Reserve My Spot</a>
+                        
+                        <a href="{% url 'workshop_action' 'reserve' 'Python-for-Beginners' %}" 
+                           class="btn btn-outline-primary w-100 rounded-pill fw-bold">
+                           Reserve My Spot
+                        </a>
                     </div>
                 </div>
             </div>
 
             <div class="col-xl-4 col-md-6">
                 <div class="workshop-card shadow-sm h-100">
-                    <div class="status-badge">New</div>
+                    <div class="status-badge badge-recorded">On-Demand</div>
                     <div class="p-4">
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="fa-solid fa-microchip text-primary fa-2x me-3"></i>
-                            <h4 class="mb-0 text-dark">Embedded Systems 101</h4>
+                        <div class="workshop-icon-circle">
+                            <i class="fa-solid fa-brain text-primary fa-2x"></i>
                         </div>
-                        <p class="text-muted small">An introduction to microcontroller programming and hardware interfacing for engineers.</p>
-                        <ul class="list-unstyled mb-4">
-                            <li class="small mb-2"><i class="fa-solid fa-calendar text-primary me-2"></i> April 02, 2026</li>
-                            <li class="small"><i class="fa-solid fa-clock text-primary me-2"></i> 5:00 PM - 6:30 PM</li>
+                        <h4 class="fw-bold text-dark mb-3">Intro to AI Modeling</h4>
+                        <p class="text-muted small mb-4">Learn the basics of data modeling and neural networks with practical examples.</p>
+                        
+                        <ul class="list-unstyled mb-4 small">
+                            <li class="mb-2"><i class="fa-solid fa-video text-primary me-2"></i> 45 Minutes Video</li>
+                            <li><i class="fa-solid fa-tags text-primary me-2"></i> Free Resource</li>
                         </ul>
-                        <a href="#" class="btn btn-outline-primary w-100 rounded-pill">Reserve My Spot</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-4 col-md-6">
-                <div class="workshop-card shadow-sm h-100">
-                    <div class="status-badge bg-secondary">On-Demand</div>
-                    <div class="p-4">
-                        <div class="d-flex align-items-center mb-3">
-                            <i class="fa-solid fa-brain text-primary fa-2x me-3"></i>
-                            <h4 class="mb-0 text-dark">Intro to AI Modeling</h4>
-                        </div>
-                        <p class="text-muted small">Explore real-world data science modeling. Perfect for beginners entering the AI sphere.</p>
-                        <ul class="list-unstyled mb-4">
-                            <li class="small mb-2"><i class="fa-solid fa-video text-primary me-2"></i> Recorded Session</li>
-                            <li class="small"><i class="fa-solid fa-tags text-primary me-2"></i> Free Access</li>
-                        </ul>
-                        <a href="#" class="btn btn-primary w-100 rounded-pill">Watch Now</a>
+                        
+                        <a href="{% url 'workshop_action' 'watch' 'Intro-to-AI-Modeling' %}" 
+                           class="btn btn-primary w-100 rounded-pill fw-bold shadow-sm">
+                           Watch Recording
+                        </a>
                     </div>
                 </div>
             </div>

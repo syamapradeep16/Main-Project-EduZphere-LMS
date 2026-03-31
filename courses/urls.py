@@ -14,5 +14,7 @@ urlpatterns = [
     path('course/<int:course_id>/lesson/edit/<int:lesson_id>/',edit_lesson, name='edit_lesson'),
     path('course/<int:course_id>/lesson/delete/<int:lesson_id>/',delete_lesson, name='delete_lesson'),
     path('course/<int:course_id>/lesson/<int:lesson_id>/', lesson_detail, name='lesson_detail'),
+    path('workshops/', workshops, name='workshops'),
+    path('workshops/action/<str:action_type>/<str:title>/', workshop_action, name='workshop_action'),
 
 ]

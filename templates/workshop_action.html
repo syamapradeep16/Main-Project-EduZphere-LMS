@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-lg rounded-4 p-4">
+                
+                {% if action_type == 'watch' %}
+                <div class="text-center">
+                    <h3 class="fw-bold mb-3">{{ title }}</h3>
+                    <div class="ratio ratio-16x9 mb-4 rounded-3 overflow-hidden shadow">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                    </div>
+                    <p class="text-muted">You are watching the recorded session of {{ title }}.</p>
+                    <a href="{% url 'workshops' %}" class="btn btn-outline-secondary rounded-pill">Back to Workshops</a>
+                </div>
+
+                {% else %}
+                <div>
+                    <h3 class="fw-bold mb-1">Reserve Your Spot</h3>
+                    <p class="text-muted mb-4">Register for: <strong>{{ title }}</strong></p>
+                    
+                    <form method="POST" action="{% url 'contact' %}"> {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Full Name</label>
+                            <input type="text" name="name" class="form-control rounded-3" placeholder="Enter your name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold">Email Address</label>
+                            <input type="email" name="email" class="form-control rounded-3" placeholder="name@example.com" required>
+                        </div>
+                        <input type="hidden" name="message" value="Registration for Workshop: {{ title }}">
+                        
+                        <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 shadow">Confirm Registration</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'workshops' %}" class="text-decoration-none small text-muted">Cancel and go back</a>
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

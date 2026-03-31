@@ -12,7 +12,6 @@ import secrets
 def checkout(request, id):
     course = get_object_or_404(Course, id=id)
     if request.method == 'POST':
-        # Generate a truly unique, clean ID
         unique_id = f"EZP-{secrets.token_hex(4).upper()}" 
         
         payment = Payment.objects.create(
